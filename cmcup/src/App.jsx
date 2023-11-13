@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 function App() {
   const [pdfDoc, setPdfDoc] = useState(null);
   const [results, setResults] = useState([]);
+
   const handleFileChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
@@ -43,19 +44,43 @@ function App() {
   };
 
   const csvFileToArray = (string) => {
-    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
-    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
+    const csvRows = string
+      .replace(/"/g, "")
+      .slice(string.indexOf("\n") + 1)
+      .split("\n")
+      //remove emptyspaces
+      .filter((val) => {
+        return val != "";
+      });
 
-    const array = csvRows.map((i) => {
-      const values = i.split(",");
-      const obj = csvHeader.reduce((object, header, index) => {
-        object[header] = values[index];
-        return object;
-      }, {});
-      return obj;
+    //remove header
+    csvRows.shift();
+
+    let bestLap = {};
+
+    const array = csvRows.map((val, index) => {
+      const arrayPiloto = val.replace(/\s+/g, " ").split(" ");
+
+      if (arrayPiloto[0] === "Melhor")
+        bestLap = { name: arrayPiloto[3] + " " + arrayPiloto[4], time: arrayPiloto[6]};
+
+      return {
+        pos: isNaN(arrayPiloto[1]) ? (index + 1).toString() : arrayPiloto[0],
+        kart: isNaN(arrayPiloto[1]) ? arrayPiloto[0] : arrayPiloto[1],
+        name: isNaN(arrayPiloto[1])
+          ? arrayPiloto[1] + " " + arrayPiloto[2]
+          : arrayPiloto[2] + " " + arrayPiloto[3],
+      };
     });
 
-    setResults(array);
+    const newArray = array.filter((val) => {
+      console.log(!isNaN(val.kart))
+      return !isNaN(val.kart);
+    });
+
+    setResults(newArray);
+    console.log("resultados:", newArray);
+    console.log("bestlap: ", bestLap)
   };
   // const MyDocument = () => (
   //   <Document>
@@ -67,14 +92,14 @@ function App() {
   //   </Document>
   // );
 
+  const searchResults = () => {};
+
   return (
     <div>
       <input type="file" onChange={handleFileChange} />
       <div key={results}>
         {results?.map((item, index) => {
-          return Object.values(item).map((val) => (
-            <h3 key={val}>{val.replace(/"/g, "")}</h3>
-          ));
+          return <h3 key={index}>{item.name}</h3>;
         })}
       </div>
     </div>
