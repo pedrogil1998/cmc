@@ -13,6 +13,7 @@
     "pdfjs-dist": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-export-table-to-excel": "^1.0.6",
     "react-pdf": "^7.5.1",
     "requirejs": "^2.3.6"
   },

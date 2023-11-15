@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Page,
   Text,
@@ -9,6 +9,7 @@ import {
   pdf,
 } from "@react-pdf/renderer";
 import "./App.css";
+import { useDownloadExcel } from "react-export-table-to-excel";
 
 const styles = StyleSheet.create({
   page: {
@@ -26,7 +27,18 @@ const styles = StyleSheet.create({
 
 function App() {
   const [pdfDoc, setPdfDoc] = useState(null);
+  const [championship, setChampionship] = useState([
+    { pos: "1", name: "Hugo Carvalhido", points: "310" },
+  ]);
+
   const [results, setResults] = useState([]);
+  const tableRef = useRef(null);
+
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: "CMC-Cup",
+    sheet: "CMC",
+  });
 
   const handleFileChange = (e) => {
     e.preventDefault();
@@ -62,7 +74,10 @@ function App() {
       const arrayPiloto = val.replace(/\s+/g, " ").split(" ");
 
       if (arrayPiloto[0] === "Melhor")
-        bestLap = { name: arrayPiloto[3] + " " + arrayPiloto[4], time: arrayPiloto[6]};
+        bestLap = {
+          name: arrayPiloto[3] + " " + arrayPiloto[4],
+          time: arrayPiloto[6],
+        };
 
       return {
         pos: isNaN(arrayPiloto[1]) ? (index + 1).toString() : arrayPiloto[0],
@@ -74,13 +89,15 @@ function App() {
     });
 
     const newArray = array.filter((val) => {
-      console.log(!isNaN(val.kart))
+      console.log(!isNaN(val.kart));
+      if (!val.kart) return false;
       return !isNaN(val.kart);
     });
 
     setResults(newArray);
+
     console.log("resultados:", newArray);
-    console.log("bestlap: ", bestLap)
+    console.log("bestlap: ", bestLap);
   };
   // const MyDocument = () => (
   //   <Document>
@@ -95,12 +112,35 @@ function App() {
   const searchResults = () => {};
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+    >
+      <h1>Cabo do Mundo Cup</h1>
       <input type="file" onChange={handleFileChange} />
-      <div key={results}>
-        {results?.map((item, index) => {
-          return <h3 key={index}>{item.name}</h3>;
-        })}
+      <div>
+        <table className="table table-bordered text-white" ref={tableRef}>
+          <thead>
+            <tr>
+              <th scope="col">Pos</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {championship.map((piloto, index) => (
+              <tr key={index}>
+                <td>{piloto.pos} </td>
+                <td>{piloto.name} </td>
+                <td>{piloto.points} </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button onClick={onDownload}>Download</button>
       </div>
     </div>
   );
