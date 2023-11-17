@@ -29,11 +29,30 @@ export const scoringSystem = [
 export const addResultsToChampionship = (classification, raceResults) => {
   const racePoints = raceResults.map((entry) => {
     const match = scoringSystem.find((element) => element.pos == entry.pos);
-    return { name: entry.name, points: match.points };
+    return {
+      name: entry.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), //remove accents
+      points: match.points,
+    };
   });
 
-  const newClassification = classification.map((piloto) => {
-    const add = racePoints.find((element) => element.name == piloto.name);
+  const newClassification = racePoints.map((piloto) => {
+    const add = classification.find((element) => element.name == piloto.name);
+
     //keep going
+    return {
+      name: piloto.name,
+      points: add
+        ? (parseInt(piloto.points) + parseInt(add.points)).toString()
+        : piloto.points.toString(),
+    };
+  });
+
+  const totalClassification = [...classification, ...newClassification]; //Fix
+  totalClassification.sort((a, b) => b.points - a.points);
+  const retClass = totalClassification.filter((value, index, self) => {
+    return self.findIndex((v) => v.name === value.name) === index;
+  });
+  return retClass.map((piloto, index) => {
+    return { ...piloto, pos: (index + 1).toString() };
   });
 };
