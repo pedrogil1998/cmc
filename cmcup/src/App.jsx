@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import { addResultsToChampionship } from "./utils/utils";
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import kcdmlogo from "./assets/kcdmlogo.png";
+import { getChampionship, updateChampionship } from "./requests/requests";
 
 const TitleText = styled(Typography)((props) => ({
   fontFamily: "Nunito-Sans",
@@ -27,6 +28,9 @@ function App() {
   const inputRef = useRef(null);
   const tableRef = useRef(null);
   const [championship, setChampionship] = useState([]);
+  useEffect(() => {
+    getChampionship(setChampionship);
+  }, []);
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
@@ -99,7 +103,19 @@ function App() {
     setChampionship(addResultsToChampionship(championship, newArray));
   };
 
-  const searchResults = () => {};
+  const handleSaveChampionship = () => {
+    updateChampionship(championship)
+      .then((value) => {
+        alert("Base de dados atualizada.");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const handleClearChampionship = () => {
+    setChampionship([]);
+  };
 
   return (
     <div
@@ -171,9 +187,26 @@ function App() {
             </Table>
           </TableContainer>
         </Box>
-        <button style={{ width: "fit-content" }} onClick={onDownload}>
-          Download
-        </button>
+        <Box display="flex" flexDirection="row">
+          <button
+            style={{ marginRight: "1rem", width: "8rem" }}
+            onClick={handleSaveChampionship}
+          >
+            Save
+          </button>
+          <button
+            style={{ marginLeft: "1rem", marginRight: "1rem", width: "8rem" }}
+            onClick={onDownload}
+          >
+            Download
+          </button>
+          <button
+            style={{ marginLeft: "1rem", width: "8rem" }}
+            onClick={handleClearChampionship}
+          >
+            Limpar Tabela
+          </button>
+        </Box>
       </Box>
     </div>
   );
