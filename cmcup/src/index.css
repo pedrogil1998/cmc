@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Nunito-Sans";
+  src: url("./fonts/NunitoSans.ttf") format("truetype");
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -29,7 +34,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #213547;
+  background-color: #ffffff;
 }
 
 h1 {
