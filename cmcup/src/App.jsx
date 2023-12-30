@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { useDownloadExcel } from "react-export-table-to-excel";
-import { addResultsToChampionship, scoringSystem } from "./utils/utils";
+import {
+  addResultsToChampionship,
+  arrayMove,
+  scoringSystem,
+} from "./utils/utils";
 import {
   Box,
   Button,
@@ -119,6 +123,26 @@ function App() {
     setChampionship([]);
   };
 
+  const getMostKeys = (championship) => {
+    let highestLength = 0;
+    let highestItem = 0;
+    for (let i = 0; i < championship.length; i++) {
+      let objLength = Object.keys(championship[i]).length;
+      if (objLength > highestLength) {
+        highestLength = objLength;
+        highestItem = i;
+      }
+    }
+    const keys = Object.keys(championship[highestItem]);
+    const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
+    const newKeys2 = arrayMove(
+      newKeys,
+      newKeys.indexOf("points"),
+      newKeys.length - 1
+    );
+    return newKeys2;
+  };
+
   return (
     <div
       style={{
@@ -141,8 +165,13 @@ function App() {
           <img src={kcdmlogo} className="logo cm" alt="Cm logo" />
         </a>
       </Box>
-      <Box display="flex" flexDirection="column" alignItems="center" sx={{backgroundColor: "lightgray"}}>
-        <TitleText variant="h5" style={{ color: "black", marginTop:"3rem" }}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        sx={{ backgroundColor: "lightgray" }}
+      >
+        <TitleText variant="h5" style={{ color: "black", marginTop: "3rem" }}>
           Inserir os ficheiros em formato <u>.csv</u>:
         </TitleText>
         <Box
@@ -152,7 +181,12 @@ function App() {
           sx={{ backgroundColor: "#a0a0a0", width: "fit-content" }}
         >
           <input ref={inputRef} type="file" onChange={handleFileChange} />
-          <button onClick={resetFileInput} style={{backgroundColor: "ActiveBorder"}}>Clear</button>
+          <button
+            onClick={resetFileInput}
+            style={{ backgroundColor: "ActiveBorder" }}
+          >
+            Clear
+          </button>
         </Box>
         <Box
           display="flex"
@@ -168,9 +202,15 @@ function App() {
             >
               <TableHead>
                 <TableRow>
-                  <TableCell>Posição</TableCell>
-                  <TableCell align="center">Nome</TableCell>
-                  <TableCell align="right">Pontuação</TableCell>
+                  {championship.length &&
+                    getMostKeys(championship).map(
+                      (key) =>
+                        key != "index" && (
+                          <TableCell align="center" key={key}>
+                            {key}
+                          </TableCell>
+                        )
+                    )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -179,19 +219,17 @@ function App() {
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{ color: "white" }}
-                    >
-                      {piloto.pos}
-                    </TableCell>
-                    <TableCell align="center" sx={{ color: "white" }}>
-                      {piloto.name}
-                    </TableCell>
-                    <TableCell align="right" sx={{ color: "white" }}>
-                      {piloto.points}
-                    </TableCell>
+                    {getMostKeys(championship).map((key, index) => {
+                      return key != "index" && (
+                        <TableCell
+                          key={key + index}
+                          align="center"
+                          sx={{ color: "white" }}
+                        >
+                          {piloto[key] || "0"}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                 ))}
               </TableBody>
@@ -221,12 +259,20 @@ function App() {
             Limpar Tabela
           </button>
         </Box>
-        <TitleText variant="h6" style={{ color: "black", marginTop: "0.5rem", marginBottom: "3rem"}}>
+        <TitleText
+          variant="h6"
+          style={{ color: "black", marginTop: "0.5rem", marginBottom: "3rem" }}
+        >
           * Ao clicar no botão <u>Save</u> estará a guardar as alterações na
           Base de Dados.
         </TitleText>
       </Box>
-      <Box display="flex" flexDirection="column" alignItems="center" paddingBottom={"2rem"}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        paddingBottom={"2rem"}
+      >
         <TitleText marginTop="3rem" variant="h5" style={{ color: "black" }}>
           Sistema de pontuação utilizado:
         </TitleText>
