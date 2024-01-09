@@ -6,8 +6,7 @@
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 3em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -95,4 +94,29 @@
 /* Focus */
 .file input:focus ~ .file-custom {
   box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+}
+
+.link {
+  padding: 0 1rem;
+  color: black;
+  text-decoration: underline;
+}
+
+.link:hover{
+  transform: scale(1.2);
+  color: black;
+}
+
+.header-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem;
 }

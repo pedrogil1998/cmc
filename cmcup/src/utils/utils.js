@@ -1,3 +1,6 @@
+import { Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
 export const scoringSystem = [
   { pos: 1, points: 30 },
   { pos: 2, points: 28 },
@@ -5,26 +8,76 @@ export const scoringSystem = [
   { pos: 4, points: 24 },
   { pos: 5, points: 22 },
   { pos: 6, points: 20 },
-  { pos: 7, points: 18 },
-  { pos: 8, points: 16 },
-  { pos: 9, points: 14 },
-  { pos: 10, points: 12 },
-  { pos: 11, points: 10 },
-  { pos: 12, points: 9 },
-  { pos: 13, points: 8 },
-  { pos: 14, points: 7 },
-  { pos: 15, points: 6 },
-  { pos: 16, points: 5 },
-  { pos: 17, points: 4 },
-  { pos: 18, points: 3 },
-  { pos: 19, points: 2 },
-  { pos: 20, points: 1 },
-  { pos: 21, points: 1 },
-  { pos: 22, points: 1 },
-  { pos: 23, points: 1 },
-  { pos: 24, points: 1 },
+  { pos: 7, points: 19 },
+  { pos: 8, points: 18 },
+  { pos: 9, points: 17 },
+  { pos: 10, points: 16 },
+  { pos: 11, points: 15 },
+  { pos: 12, points: 14 },
+  { pos: 13, points: 13 },
+  { pos: 14, points: 12 },
+  { pos: 15, points: 11 },
+  { pos: 16, points: 10 },
+  { pos: 17, points: 9 },
+  { pos: 18, points: 8 },
+  { pos: 19, points: 7 },
+  { pos: 20, points: 6 },
+  { pos: 21, points: 5 },
+  { pos: 22, points: 4 },
+  { pos: 23, points: 3 },
+  { pos: 24, points: 2 },
   { pos: 25, points: 1 },
 ];
+
+export const TitleText = styled(Typography)(() => ({
+  fontFamily: "Nunito-Sans",
+  fontWeight: 800,
+}));
+
+export const getMostKeys = (championship) => {
+  let highestLength = 0;
+  let highestItem = 0;
+  for (let i = 0; i < championship.length; i++) {
+    let objLength = Object.keys(championship[i]).length;
+    if (objLength > highestLength) {
+      highestLength = objLength;
+      highestItem = i;
+    }
+  }
+  const keys = Object.keys(championship[highestItem]);
+  const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
+  const newKeys2 = arrayMove(
+    newKeys,
+    newKeys.indexOf("points"),
+    newKeys.length - 1
+  );
+  return newKeys2;
+};
+
+export const getKeyString = (key) => {
+  switch (key) {
+    case "pos":
+      return "Posição";
+    case "name":
+      return "Nome";
+    case "race1":
+      return "Corrida 1";
+    case "race2":
+      return "Corrida 2";
+    case "race3":
+      return "Corrida 3";
+    case "race4":
+      return "Corrida 4";
+    case "race5":
+      return "Corrida 5";
+    case "race6":
+      return "Corrida 6";
+    case "points":
+      return "Pontuação";
+    default:
+      return "";
+  }
+};
 
 export const arrayMove = (arr, old_index, new_index) => {
   if (new_index >= arr.length) {
