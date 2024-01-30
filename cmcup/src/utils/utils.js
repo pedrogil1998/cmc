@@ -62,16 +62,40 @@ export const getKeyString = (key) => {
       return "Nome";
     case "race1":
       return "Corrida 1";
+    case "group1":
+      return "Grupo 1";
     case "race2":
       return "Corrida 2";
+    case "group2":
+      return "Grupo 2";
     case "race3":
       return "Corrida 3";
+    case "group3":
+      return "Grupo 3";
     case "race4":
       return "Corrida 4";
+    case "group4":
+      return "Grupo 4";
     case "race5":
       return "Corrida 5";
+    case "group5":
+      return "Grupo 5";
     case "race6":
       return "Corrida 6";
+    case "group6":
+      return "Grupo 6";
+    case "race7":
+      return "Corrida 7";
+    case "group7":
+      return "Grupo 7";
+    case "race8":
+      return "Corrida 8";
+    case "group8":
+      return "Grupo 8";
+    case "race9":
+      return "Corrida 9";
+    case "group9":
+      return "Grupo 9";
     case "points":
       return "Pontuação";
     default:
@@ -96,13 +120,15 @@ export const addResultsToChampionship = (classification, raceResults) => {
     return {
       name: entry.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), //remove accents
       points: match.points,
+      raceName: entry.raceName,
     };
   });
 
   const newClassification = racePoints.map((piloto) => {
     const add = classification.find((element) => element.name == piloto.name);
-    const doneRaces = add ? Object.keys(add).length - 2 : 1;
-
+    const raceNumber = add
+      ? Object.keys(add).filter((str) => str.includes("race")).length + 1
+      : 1;
     //keep going
     return {
       ...add,
@@ -110,7 +136,8 @@ export const addResultsToChampionship = (classification, raceResults) => {
       points: add
         ? (parseInt(piloto.points) + parseInt(add.points)).toString()
         : piloto.points.toString(),
-      ["race" + doneRaces]: piloto.points.toString(),
+      ["race" + raceNumber]: piloto.points.toString(),
+      ["group" + raceNumber]: piloto.raceName,
     };
   });
 

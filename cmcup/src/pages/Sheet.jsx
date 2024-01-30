@@ -37,7 +37,7 @@ const Sheet = () => {
   const resetFileInput = () => {
     inputRef.current.value = null;
   };
-  const csvFileToArray = (string) => {
+  const csvFileToArray = (string, raceName = "") => {
     const csvRows = string
       .replace(/"/g, "")
       .slice(string.indexOf("\n") + 1)
@@ -70,6 +70,7 @@ const Sheet = () => {
             pos: isNaN(arrayPiloto[1]) ? count.toString() : arrayPiloto[0],
             kart: isNaN(arrayPiloto[1]) ? arrayPiloto[0] : arrayPiloto[1],
             name: isNaN(arrayPiloto[1]) ? arrayPiloto[1] : arrayPiloto[2],
+            raceName: raceName,
           };
         }
       }
@@ -100,10 +101,11 @@ const Sheet = () => {
   const handleFileChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
+    const raceName = file.name.split(".")[0];
     const reader = new FileReader();
     reader.readAsText(file);
     reader.onload = () => {
-      csvFileToArray(reader.result);
+      csvFileToArray(reader.result, raceName);
     };
     reader.onerror = () => {
       alert("erro no ficheiro");
