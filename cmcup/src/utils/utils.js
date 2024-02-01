@@ -56,7 +56,8 @@ export const getMostKeys = (championship) => {
     newKeys2.indexOf("finalPoints"),
     newKeys2.length - 1
   );
-  return newKeys3;
+  const newKeys4 = arrayMove(newKeys3, newKeys3.indexOf("name"), 1);
+  return newKeys4;
 };
 
 export const getKeyString = (key) => {
