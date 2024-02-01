@@ -85,13 +85,14 @@ const Sheet = () => {
   };
 
   const handleSaveChampionship = () => {
-    updateChampionship(championship)
-      .then(() => {
-        alert("Base de dados atualizada.");
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    confirm("Tem a certeza que deseja guardar as alterações?") &&
+      updateChampionship(championship)
+        .then(() => {
+          alert("Base de dados atualizada.");
+        })
+        .catch((err) => {
+          alert(err);
+        });
   };
 
   const handleClearChampionship = () => {
@@ -131,11 +132,29 @@ const Sheet = () => {
         sx={{ backgroundColor: "#a0a0a0", width: "fit-content" }}
       >
         <input ref={inputRef} type="file" onChange={handleFileChange} />
+      </Box>
+      <Box padding={"1rem"} bgcolor={"darkgray"}>
+        <label htmlFor="fileName">Nome do ficheiro: </label>
+        <input
+          name="fileName"
+          onChange={(e) => setFileName(e.target.value)}
+        ></input>
+      </Box>
+      <Box display="flex" flexDirection="row" margin="1rem">
         <button
-          onClick={resetFileInput}
-          style={{ backgroundColor: "ActiveBorder" }}
+          style={{
+            marginRight: "0.5rem",
+            backgroundColor: "Highlight",
+          }}
+          onClick={handleSaveChampionship}
         >
-          Limpar Ficheiro
+          Save
+        </button>
+        <button
+          style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
+          onClick={onDownload}
+        >
+          Download
         </button>
         <button
           style={{ marginLeft: "0.5rem" }}
@@ -144,6 +163,14 @@ const Sheet = () => {
           Limpar Tabela
         </button>
       </Box>
+
+      <TitleText
+        variant="h6"
+        style={{ color: "black", marginTop: "0.5rem", marginBottom: "0.5rem" }}
+      >
+        * Ao clicar no botão <u>Save</u> estará a guardar as alterações na Base
+        de Dados.
+      </TitleText>
       <Box
         display="flex"
         flexDirection="column"
@@ -194,38 +221,6 @@ const Sheet = () => {
           </Table>
         </TableContainer>
       </Box>
-      <Box display="flex" flexDirection="row" marginBottom="1rem">
-        <button
-          style={{
-            marginRight: "0.5rem",
-            backgroundColor: "Highlight",
-          }}
-          onClick={handleSaveChampionship}
-        >
-          Save
-        </button>
-        <button
-          style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
-          onClick={onDownload}
-        >
-          Download
-        </button>
-        
-      </Box>
-      <Box padding={"1rem"} bgcolor={"darkgray"}>
-        <label htmlFor="fileName">Nome do ficheiro: </label>
-        <input
-          name="fileName"
-          onChange={(e) => setFileName(e.target.value)}
-        ></input>
-      </Box>
-      <TitleText
-        variant="h6"
-        style={{ color: "black", marginTop: "0.5rem", marginBottom: "3rem" }}
-      >
-        * Ao clicar no botão <u>Save</u> estará a guardar as alterações na Base
-        de Dados.
-      </TitleText>
     </Box>
   );
 };
