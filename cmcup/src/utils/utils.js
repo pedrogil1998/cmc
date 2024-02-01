@@ -51,7 +51,12 @@ export const getMostKeys = (championship) => {
     newKeys.indexOf("points"),
     newKeys.length - 1
   );
-  return newKeys2;
+  const newKeys3 = arrayMove(
+    newKeys2,
+    newKeys2.indexOf("finalPoints"),
+    newKeys2.length - 1
+  );
+  return newKeys3;
 };
 
 export const getKeyString = (key) => {
@@ -61,43 +66,57 @@ export const getKeyString = (key) => {
     case "name":
       return "Nome";
     case "race1":
-      return "Corrida 1";
+      return "C1";
     case "group1":
-      return "Grupo 1";
+      return "G1";
     case "race2":
-      return "Corrida 2";
+      return "C2";
     case "group2":
-      return "Grupo 2";
+      return "G2";
     case "race3":
-      return "Corrida 3";
+      return "C3";
     case "group3":
-      return "Grupo 3";
+      return "G3";
     case "race4":
-      return "Corrida 4";
+      return "C4";
     case "group4":
-      return "Grupo 4";
+      return "G4";
     case "race5":
-      return "Corrida 5";
+      return "C5";
     case "group5":
-      return "Grupo 5";
+      return "G5";
     case "race6":
-      return "Corrida 6";
+      return "C6";
     case "group6":
-      return "Grupo 6";
+      return "G6";
     case "race7":
-      return "Corrida 7";
+      return "C7";
     case "group7":
-      return "Grupo 7";
+      return "G7";
     case "race8":
-      return "Corrida 8";
+      return "C8";
     case "group8":
-      return "Grupo 8";
+      return "G8";
     case "race9":
-      return "Corrida 9";
+      return "C9";
     case "group9":
-      return "Grupo 9";
+      return "G9";
+    case "race10":
+      return "C10";
+    case "group10":
+      return "G10";
+    case "race11":
+      return "C11";
+    case "group11":
+      return "G11";
+    case "race12":
+      return "C12";
+    case "group12":
+      return "G12";
     case "points":
-      return "Pontuação";
+      return "PT";
+    case "finalPoints":
+      return "PF";
     default:
       return "";
   }
@@ -129,6 +148,27 @@ export const addResultsToChampionship = (classification, raceResults) => {
     const raceNumber = add
       ? Object.keys(add).filter((str) => str.includes("race")).length + 1
       : 1;
+
+    const arrayOfPoints = add
+      ? Object.entries(add)
+          .filter((arr) => arr[0].includes("race"))
+          .map((array) => parseInt(array[1]))
+      : [0];
+
+    arrayOfPoints.push(piloto.points); //add current race
+
+    const racesToRemove =
+      raceNumber > 9
+        ? arrayOfPoints.length - 2
+        : raceNumber > 7
+        ? arrayOfPoints.length - 1
+        : arrayOfPoints.length;
+
+    const arrayWithoutWorse =
+      arrayOfPoints.length > 3
+        ? arrayOfPoints.sort((a, b) => a - b).slice(1, racesToRemove)
+        : arrayOfPoints;
+
     //keep going
     return {
       ...add,
@@ -136,6 +176,10 @@ export const addResultsToChampionship = (classification, raceResults) => {
       points: add
         ? (parseInt(piloto.points) + parseInt(add.points)).toString()
         : piloto.points.toString(),
+      finalPoints: arrayWithoutWorse.reduce(
+        (partialSum, a) => partialSum + a,
+        0
+      ), //somar
       ["race" + raceNumber]: piloto.points.toString(),
       ["group" + raceNumber]: piloto.raceName,
     };

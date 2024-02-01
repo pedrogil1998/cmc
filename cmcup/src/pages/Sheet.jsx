@@ -137,6 +137,12 @@ const Sheet = () => {
         >
           Limpar Ficheiro
         </button>
+        <button
+          style={{ marginLeft: "0.5rem" }}
+          onClick={handleClearChampionship}
+        >
+          Limpar Tabela
+        </button>
       </Box>
       <Box
         display="flex"
@@ -204,12 +210,7 @@ const Sheet = () => {
         >
           Download
         </button>
-        <button
-          style={{ marginLeft: "0.5rem" }}
-          onClick={handleClearChampionship}
-        >
-          Limpar Tabela
-        </button>
+        
       </Box>
       <Box padding={"1rem"} bgcolor={"darkgray"}>
         <label htmlFor="fileName">Nome do ficheiro: </label>
