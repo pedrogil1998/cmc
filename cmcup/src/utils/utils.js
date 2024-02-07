@@ -188,6 +188,7 @@ export const addResultsToChampionship = (classification, raceResults) => {
 
     //keep going
     return {
+      ...addNpRaces,
       ...add,
       name: piloto.name,
       points: add
@@ -199,11 +200,10 @@ export const addResultsToChampionship = (classification, raceResults) => {
       ), //somar
       ["race" + raceNumber]: piloto.points.toString(),
       ["group" + raceNumber]: piloto.raceName,
-      ...addNpRaces,
     };
   });
 
-  const totalClassification = [...classification, ...newClassification]; //Fix
+  const totalClassification = [...newClassification, ...classification]; //Fix
   totalClassification.sort((a, b) => b.finalPoints - a.finalPoints);
   const retClass = totalClassification.filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
