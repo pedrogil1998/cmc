@@ -18,12 +18,18 @@ import {
 } from "../utils/utils";
 import { getChampionship, updateChampionship } from "../requests/requests";
 import { useDownloadExcel } from "react-export-table-to-excel";
+import RaceModal from "./RaceModal";
 
 const Sheet = () => {
   const inputRef = useRef(null);
   const tableRef = useRef(null);
   const [fileName, setFileName] = useState("CMC-Cup");
   const [championship, setChampionship] = useState([]);
+
+  //MODAL
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getChampionship(setChampionship);
@@ -38,7 +44,7 @@ const Sheet = () => {
   const resetFileInput = () => {
     inputRef.current.value = null;
   };
-  const csvFileToArray = (string, raceName = "") => {
+  const csvFileToArray = (string, raceName = "", roundNumber = 0) => {
     const csvRows = string
       .replace(/"/g, "")
       .slice(string.indexOf("\n") + 1)
@@ -72,6 +78,7 @@ const Sheet = () => {
             kart: isNaN(arrayPiloto[1]) ? arrayPiloto[0] : arrayPiloto[1],
             name: isNaN(arrayPiloto[1]) ? arrayPiloto[1] : arrayPiloto[2],
             raceName: raceName,
+            roundNumber: roundNumber,
           };
         }
       }
@@ -100,20 +107,20 @@ const Sheet = () => {
     setChampionship([]);
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, roundNumber) => {
     e.preventDefault();
     const file = e.target.files[0];
     const raceName = file.name.split(".")[0];
     const reader = new FileReader();
     reader.readAsText(file);
     reader.onload = () => {
-      csvFileToArray(reader.result, raceName);
+      csvFileToArray(reader.result, raceName, roundNumber);
     };
     reader.onerror = () => {
       alert("erro no ficheiro");
     };
 
-    resetFileInput();
+    //resetFileInput();
   };
 
   const handleSortByFinalPoints = (e) => {
@@ -127,7 +134,7 @@ const Sheet = () => {
       alignItems="center"
       sx={{ backgroundColor: "lightgray" }}
     >
-      <TitleText variant="h5" style={{ color: "black", marginTop: "3rem" }}>
+      {/* <TitleText variant="h5" style={{ color: "black", marginTop: "3rem" }}>
         Inserir os ficheiros em formato <u>.csv</u>:
       </TitleText>
       <Box
@@ -137,11 +144,12 @@ const Sheet = () => {
         sx={{ backgroundColor: "#a0a0a0", width: "fit-content" }}
       >
         <input ref={inputRef} type="file" onChange={handleFileChange} />
-      </Box>
+      </Box>*/}
       <Box padding={"1rem"} bgcolor={"darkgray"}>
         <label htmlFor="fileName">Nome do ficheiro: </label>
         <input
           name="fileName"
+          value={fileName}
           onChange={(e) => setFileName(e.target.value)}
         ></input>
       </Box>
@@ -173,7 +181,17 @@ const Sheet = () => {
         >
           Sort
         </button>
+        <button style={{ marginLeft: "0.5rem" }} onClick={handleOpen}>
+          Inserir Corrida
+        </button>
       </Box>
+      <RaceModal
+        open={open}
+        handleClose={handleClose}
+        handleFileChange={handleFileChange}
+        fileName={fileName}
+        setFileName={setFileName}
+      />
 
       <TitleText
         variant="h6"

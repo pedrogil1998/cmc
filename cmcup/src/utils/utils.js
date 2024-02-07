@@ -145,14 +145,26 @@ export const addResultsToChampionship = (classification, raceResults) => {
       name: entry.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""), //remove accents
       points: match.points,
       raceName: entry.raceName,
+      roundNumber: entry.roundNumber,
     };
   });
 
   const newClassification = racePoints.map((piloto) => {
     const add = classification.find((element) => element.name == piloto.name);
-    const raceNumber = add
+
+    let raceNumber = add
       ? Object.keys(add).filter((str) => str.includes("race")).length + 1
       : 1;
+
+    const addNpRaces = {};
+    if (raceNumber < piloto.roundNumber) {
+      raceNumber = piloto.roundNumber + 1;
+
+      for (let index = 1; index < raceNumber; index++) {
+        addNpRaces["race" + index] = 0;
+        addNpRaces["group" + index] = "NP";
+      }
+    }
 
     const arrayOfPoints = add
       ? Object.entries(add)
@@ -187,6 +199,7 @@ export const addResultsToChampionship = (classification, raceResults) => {
       ), //somar
       ["race" + raceNumber]: piloto.points.toString(),
       ["group" + raceNumber]: piloto.raceName,
+      ...addNpRaces,
     };
   });
 
