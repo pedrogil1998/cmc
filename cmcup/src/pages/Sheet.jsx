@@ -14,6 +14,7 @@ import {
   addResultsToChampionship,
   getKeyString,
   getMostKeys,
+  sortByFinalPoints,
 } from "../utils/utils";
 import { getChampionship, updateChampionship } from "../requests/requests";
 import { useDownloadExcel } from "react-export-table-to-excel";
@@ -115,6 +116,10 @@ const Sheet = () => {
     resetFileInput();
   };
 
+  const handleSortByFinalPoints = (e) => {
+    setChampionship(sortByFinalPoints(championship));
+  };
+
   return (
     <Box
       display="flex"
@@ -161,6 +166,12 @@ const Sheet = () => {
           onClick={handleClearChampionship}
         >
           Limpar Tabela
+        </button>
+        <button
+          style={{ marginLeft: "0.5rem" }}
+          onClick={handleSortByFinalPoints}
+        >
+          Sort
         </button>
       </Box>
 
