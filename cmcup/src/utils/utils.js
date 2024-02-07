@@ -45,6 +45,10 @@ export const getMostKeys = (championship) => {
     }
   }
   const keys = Object.keys(championship[highestItem]);
+
+  // keys.sort((a, b) => parseInt(a.substr(a.length - 1)) - parseInt(b.substr(b.length - 1)));
+  // str.substr(str.length - 1);
+
   const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
   const newKeys2 = arrayMove(
     newKeys,
@@ -187,8 +191,20 @@ export const addResultsToChampionship = (classification, raceResults) => {
   });
 
   const totalClassification = [...classification, ...newClassification]; //Fix
-  totalClassification.sort((a, b) => b.points - a.points);
+  totalClassification.sort((a, b) => b.finalPoints - a.finalPoints);
   const retClass = totalClassification.filter((value, index, self) => {
+    return self.findIndex((v) => v.name === value.name) === index;
+  });
+  return retClass.map((piloto, index) => {
+    return { ...piloto, pos: (index + 1).toString() };
+  });
+};
+
+export const sortByFinalPoints = (classification) => {
+  const finalClass = classification.sort(
+    (a, b) => b.finalPoints - a.finalPoints
+  );
+  const retClass = finalClass.filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
   });
   return retClass.map((piloto, index) => {
