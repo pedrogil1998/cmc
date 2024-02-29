@@ -44,10 +44,7 @@ export const getMostKeys = (championship) => {
       highestItem = i;
     }
   }
-  const keys = Object.keys(championship[highestItem]);
-
-  // keys.sort((a, b) => parseInt(a.substr(a.length - 1)) - parseInt(b.substr(b.length - 1)));
-  // str.substr(str.length - 1);
+  const keys = Object.keys(championship[highestItem]).sort();
 
   const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
   const newKeys2 = arrayMove(
@@ -70,53 +67,53 @@ export const getKeyString = (key) => {
       return "Posição";
     case "name":
       return "Nome";
-    case "race1":
+    case "1race":
       return "C1";
-    case "group1":
+    case "1group":
       return "G1";
-    case "race2":
+    case "2race":
       return "C2";
-    case "group2":
+    case "2group":
       return "G2";
-    case "race3":
+    case "3race":
       return "C3";
-    case "group3":
+    case "3group":
       return "G3";
-    case "race4":
+    case "4race":
       return "C4";
-    case "group4":
+    case "4group":
       return "G4";
-    case "race5":
+    case "5race":
       return "C5";
-    case "group5":
+    case "5group":
       return "G5";
-    case "race6":
+    case "6race":
       return "C6";
-    case "group6":
+    case "6group":
       return "G6";
-    case "race7":
+    case "7race":
       return "C7";
-    case "group7":
+    case "7group":
       return "G7";
-    case "race8":
+    case "8race":
       return "C8";
-    case "group8":
+    case "8group":
       return "G8";
-    case "race9":
+    case "9race":
       return "C9";
-    case "group9":
+    case "9group":
       return "G9";
-    case "race10":
+    case "10race":
       return "C10";
-    case "group10":
+    case "10group":
       return "G10";
-    case "race11":
+    case "11race":
       return "C11";
-    case "group11":
+    case "11group":
       return "G11";
-    case "race12":
+    case "12race":
       return "C12";
-    case "group12":
+    case "12group":
       return "G12";
     case "points":
       return "PT";
@@ -161,8 +158,8 @@ export const addResultsToChampionship = (classification, raceResults) => {
       raceNumber = piloto.roundNumber + 1;
 
       for (let index = 1; index < raceNumber; index++) {
-        addNpRaces["race" + index] = 0;
-        addNpRaces["group" + index] = "NP";
+        addNpRaces[index + "race"] = 0;
+        addNpRaces[index + "group"] = "NP";
       }
     }
 
@@ -198,8 +195,8 @@ export const addResultsToChampionship = (classification, raceResults) => {
         (partialSum, a) => partialSum + a,
         0
       ), //somar
-      ["race" + raceNumber]: piloto.points.toString(),
-      ["group" + raceNumber]: piloto.raceName,
+      [raceNumber + "race"]: piloto.points.toString(),
+      [raceNumber + "group"]: piloto.raceName,
     };
   });
 

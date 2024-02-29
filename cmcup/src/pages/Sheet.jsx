@@ -239,7 +239,7 @@ const Sheet = () => {
                           align="center"
                           sx={{ color: "white" }}
                         >
-                          {piloto[key] || "0"}
+                          {piloto[key] || key.includes("group") && "NP" || "0"}
                         </TableCell>
                       )
                     );
