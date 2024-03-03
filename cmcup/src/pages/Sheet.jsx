@@ -12,6 +12,8 @@ import { useEffect, useRef, useState } from "react";
 import {
   TitleText,
   addResultsToChampionship,
+  getDriverFinalPoints,
+  getDriverTotalPoints,
   getKeyString,
   getMostKeys,
   sortByFinalPoints,
@@ -223,6 +225,8 @@ const Sheet = () => {
                         </TableCell>
                       )
                   )}
+                <TableCell align="center">PT</TableCell>
+                <TableCell align="center">PF</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -239,11 +243,27 @@ const Sheet = () => {
                           align="center"
                           sx={{ color: "white" }}
                         >
-                          {piloto[key] || key.includes("group") && "NP" || "0"}
+                          {piloto[key] ||
+                            (key.includes("group") && "NP") ||
+                            "0"}
                         </TableCell>
                       )
                     );
                   })}
+                  <TableCell
+                    key={"pointsCell"}
+                    align="center"
+                    sx={{ color: "white" }}
+                  >
+                    {getDriverTotalPoints(piloto)}
+                  </TableCell>
+                  <TableCell
+                    key={"finalPointsCell"}
+                    align="center"
+                    sx={{ color: "white" }}
+                  >
+                    {getDriverFinalPoints(championship, piloto)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

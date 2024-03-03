@@ -115,10 +115,10 @@ export const getKeyString = (key) => {
       return "C12";
     case "12group":
       return "G12";
-    case "points":
-      return "PT";
-    case "finalPoints":
-      return "PF";
+    // case "points":
+    //   return "PT";
+    // case "finalPoints":
+    //   return "PF";
     default:
       return "";
   }
@@ -188,20 +188,24 @@ export const addResultsToChampionship = (classification, raceResults) => {
       ...addNpRaces,
       ...add,
       name: piloto.name,
-      points: add
-        ? (parseInt(piloto.points) + parseInt(add.points)).toString()
-        : piloto.points.toString(),
-      finalPoints: arrayWithoutWorse.reduce(
-        (partialSum, a) => partialSum + a,
-        0
-      ), //somar
+      // points: add
+      //   ? (parseInt(piloto.points) + parseInt(add.points)).toString()
+      //   : piloto.points.toString(),
+      // finalPoints: arrayWithoutWorse.reduce(
+      //   (partialSum, a) => partialSum + a,
+      //   0
+      // ), //somar
       [raceNumber + "race"]: piloto.points.toString(),
       [raceNumber + "group"]: piloto.raceName,
     };
   });
 
   const totalClassification = [...newClassification, ...classification]; //Fix
-  totalClassification.sort((a, b) => b.finalPoints - a.finalPoints);
+  totalClassification.sort(
+    (a, b) =>
+      getDriverFinalPoints(totalClassification, b) -
+      getDriverFinalPoints(totalClassification, a)
+  );
   const retClass = totalClassification.filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
   });
@@ -212,7 +216,9 @@ export const addResultsToChampionship = (classification, raceResults) => {
 
 export const sortByFinalPoints = (classification) => {
   const finalClass = classification.sort(
-    (a, b) => b.finalPoints - a.finalPoints
+    (a, b) =>
+      getDriverFinalPoints(classification, b) -
+      getDriverFinalPoints(classification, a)
   );
   const retClass = finalClass.filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
@@ -220,4 +226,55 @@ export const sortByFinalPoints = (classification) => {
   return retClass.map((piloto, index) => {
     return { ...piloto, pos: (index + 1).toString() };
   });
+};
+
+export const getDriverTotalPoints = (driver) => {
+  return Object.entries(driver)
+    .filter((arr) => arr[0].includes("race"))
+    .map((array) => parseInt(array[1]))
+    .reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+};
+
+export const getDriverFinalPoints = (championship, driver) => {
+  let totalRaces = 0;
+
+  for (let i = 0; i < championship.length; i++) {
+    let driverRaces = Object.keys(championship[i]).filter((str) =>
+      str.includes("race")
+    ).length;
+
+    if (driverRaces > totalRaces) {
+      totalRaces = driverRaces;
+    }
+  }
+
+  let totalDriverRaces = driver
+    ? Object.keys(driver).filter((str) => str.includes("race")).length
+    : 1;
+
+  const arrayOfPoints = Object.entries(driver)
+    .filter((arr) => arr[0].includes("race"))
+    .map((array) => parseInt(array[1]));
+
+  while (arrayOfPoints.length < totalRaces) {
+    arrayOfPoints.push(0);
+  }
+
+  const racesToRemove =
+    totalDriverRaces > 9
+      ? arrayOfPoints.length - 2
+      : totalDriverRaces > 7
+      ? arrayOfPoints.length - 1
+      : arrayOfPoints.length;
+
+  const arrayWithoutWorse =
+    arrayOfPoints.length > 3
+      ? arrayOfPoints.sort((a, b) => a - b).slice(1, racesToRemove)
+      : arrayOfPoints;
+
+  return arrayWithoutWorse.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
 };
