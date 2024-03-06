@@ -155,7 +155,7 @@ export const addResultsToChampionship = (classification, raceResults) => {
 
     const addNpRaces = {};
     if (raceNumber < piloto.roundNumber) {
-      raceNumber = piloto.roundNumber + 1;
+      raceNumber = piloto.roundNumber * 2 - 1;
 
       for (let index = 1; index < raceNumber; index++) {
         addNpRaces[index + "race"] = 0;
