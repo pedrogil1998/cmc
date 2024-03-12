@@ -149,15 +149,25 @@ export const addResultsToChampionship = (classification, raceResults) => {
   const newClassification = racePoints.map((piloto) => {
     const add = classification.find((element) => element.name == piloto.name);
 
+    let driverRaces = add
+      ? Object.keys(add).filter((str) => str.includes("race"))
+      : [];
+
+    let latestRaceNumber = driverRaces.length
+      ? parseInt(driverRaces[driverRaces.length - 1].substring(0, 1))
+      : 1;
+
     let raceNumber = add
       ? Object.keys(add).filter((str) => str.includes("race")).length + 1
       : 1;
 
-    const addNpRaces = {};
-    if (raceNumber < piloto.roundNumber) {
-      raceNumber = piloto.roundNumber * 2 - 1;
+    //Get latest race number
 
-      for (let index = 1; index < raceNumber; index++) {
+    const addNpRaces = {};
+
+    if (latestRaceNumber < piloto.roundNumber * 2 - 1) {
+      raceNumber = piloto.roundNumber * 2 - 1;
+      for (let index = latestRaceNumber; index < raceNumber; index++) {
         addNpRaces[index + "race"] = 0;
         addNpRaces[index + "group"] = "NP";
       }
@@ -171,17 +181,17 @@ export const addResultsToChampionship = (classification, raceResults) => {
 
     arrayOfPoints.push(piloto.points); //add current race
 
-    const racesToRemove =
-      raceNumber > 9
-        ? arrayOfPoints.length - 2
-        : raceNumber > 7
-        ? arrayOfPoints.length - 1
-        : arrayOfPoints.length;
+    // const racesToRemove =
+    //   raceNumber > 9
+    //     ? arrayOfPoints.length - 2
+    //     : raceNumber > 7
+    //     ? arrayOfPoints.length - 1
+    //     : arrayOfPoints.length;
 
-    const arrayWithoutWorse =
-      arrayOfPoints.length > 3
-        ? arrayOfPoints.sort((a, b) => a - b).slice(1, racesToRemove)
-        : arrayOfPoints;
+    // const arrayWithoutWorse =
+    //   arrayOfPoints.length > 3
+    //     ? arrayOfPoints.sort((a, b) => a - b).slice(1, racesToRemove)
+    //     : arrayOfPoints;
 
     //keep going
     return {
