@@ -154,7 +154,7 @@ export const addResultsToChampionship = (classification, raceResults) => {
       : 1;
 
     const addNpRaces = {};
-    if (raceNumber < piloto.roundNumber) {
+    if (raceNumber < piloto.roundNumber * 2 - 1) {
       raceNumber = piloto.roundNumber * 2 - 1;
 
       for (let index = 1; index < raceNumber; index++) {
@@ -217,8 +217,8 @@ export const addResultsToChampionship = (classification, raceResults) => {
 export const sortByFinalPoints = (classification) => {
   const finalClass = classification.sort(
     (a, b) =>
-      getDriverFinalPoints(classification, b) -
-      getDriverFinalPoints(classification, a)
+      getDriverFinalPoints2(classification, b) -
+      getDriverFinalPoints2(classification, a)
   );
   const retClass = finalClass.filter((value, index, self) => {
     return self.findIndex((v) => v.name === value.name) === index;
@@ -263,16 +263,53 @@ export const getDriverFinalPoints = (championship, driver) => {
   }
 
   const racesToRemove =
-    totalDriverRaces > 9
-      ? arrayOfPoints.length - 2
-      : totalDriverRaces > 7
-      ? arrayOfPoints.length - 1
-      : arrayOfPoints.length;
+    // totalDriverRaces > 9
+    //   ? arrayOfPoints.length - 2
+    //   : totalDriverRaces > 7
+    //   ? arrayOfPoints.length - 1
+    //   :
+    arrayOfPoints.length;
 
   const arrayWithoutWorse =
     arrayOfPoints.length > 3
       ? arrayOfPoints.sort((a, b) => a - b).slice(1, racesToRemove)
       : arrayOfPoints;
+
+  return arrayWithoutWorse.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+  }, 0);
+};
+
+export const getDriverFinalPoints2 = (championship, driver) => {
+  let totalRaces = 0;
+
+  for (let i = 0; i < championship.length; i++) {
+    let driverRaces = Object.keys(championship[i]).filter((str) =>
+      str.includes("race")
+    ).length;
+
+    if (driverRaces > totalRaces) {
+      totalRaces = driverRaces;
+    }
+  }
+
+  let totalDriverRaces = driver
+    ? Object.keys(driver).filter((str) => str.includes("race")).length
+    : 1;
+
+  const arrayOfPoints = Object.entries(driver)
+    .filter((arr) => arr[0].includes("race"))
+    .map((array) => parseInt(array[1]));
+
+  while (arrayOfPoints.length < totalRaces) {
+    arrayOfPoints.push(0);
+  }
+
+  const racesToRemove = totalRaces > 9 ? 3 : totalDriverRaces > 7 ? 2 : 1;
+
+  const arrayWithoutWorse = racesToRemove > 1
+    ? arrayOfPoints.sort((a, b) => a - b).slice(racesToRemove)
+    : arrayOfPoints;
 
   return arrayWithoutWorse.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;

@@ -13,6 +13,7 @@ import {
   TitleText,
   addResultsToChampionship,
   getDriverFinalPoints,
+  getDriverFinalPoints2,
   getDriverTotalPoints,
   getKeyString,
   getMostKeys,
@@ -262,7 +263,7 @@ const Sheet = () => {
                     align="center"
                     sx={{ color: "white" }}
                   >
-                    {getDriverFinalPoints(championship, piloto)}
+                    {getDriverFinalPoints2(championship, piloto)}
                   </TableCell>
                 </TableRow>
               ))}
