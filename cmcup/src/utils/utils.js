@@ -44,7 +44,7 @@ export const getMostKeys = (championship) => {
       highestItem = i;
     }
   }
-  const keys = Object.keys(championship[highestItem]).sort();
+  const keys = Object.keys(championship[highestItem]).sort((a, b) => a.substring(0,1) - b.substring(0,2));
 
   const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
   const newKeys2 = arrayMove(
