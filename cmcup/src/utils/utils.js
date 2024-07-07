@@ -44,7 +44,9 @@ export const getMostKeys = (championship) => {
       highestItem = i;
     }
   }
-  const keys = Object.keys(championship[highestItem]).sort((a, b) => a.substring(0,1) - b.substring(0,2));
+  const keys = Object.keys(championship[highestItem]).sort(
+    (a, b) => a.substring(0, 1) - b.substring(0, 2)
+  );
 
   const newKeys = arrayMove(keys, keys.indexOf("pos"), 0);
   const newKeys2 = arrayMove(
@@ -154,7 +156,7 @@ export const addResultsToChampionship = (classification, raceResults) => {
       : [];
 
     let latestRaceNumber = driverRaces.length
-      ? parseInt(driverRaces[driverRaces.length - 1].substring(0, 1))
+      ? parseInt(driverRaces[driverRaces.length - 1].replace("race", ""))
       : 1;
 
     let raceNumber = add
@@ -317,9 +319,10 @@ export const getDriverFinalPoints2 = (championship, driver) => {
 
   const racesToRemove = totalRaces > 9 ? 3 : totalDriverRaces > 7 ? 2 : 1;
 
-  const arrayWithoutWorse = racesToRemove > 1
-    ? arrayOfPoints.sort((a, b) => a - b).slice(racesToRemove)
-    : arrayOfPoints;
+  const arrayWithoutWorse =
+    racesToRemove > 1
+      ? arrayOfPoints.sort((a, b) => a - b).slice(racesToRemove)
+      : arrayOfPoints;
 
   return arrayWithoutWorse.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;
