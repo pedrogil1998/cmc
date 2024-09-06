@@ -3,6 +3,34 @@ import { styled } from "@mui/material/styles";
 
 export const scoringSystem = [
   { pos: 1, points: 30 },
+  { pos: 2, points: 27 },
+  { pos: 3, points: 25 },
+  { pos: 4, points: 23 },
+  { pos: 5, points: 21 },
+  { pos: 6, points: 19 },
+  { pos: 7, points: 17 },
+  { pos: 8, points: 15 },
+  { pos: 9, points: 13 },
+  { pos: 10, points: 11 },
+  { pos: 11, points: 10 },
+  { pos: 12, points: 9 },
+  { pos: 13, points: 8 },
+  { pos: 14, points: 7 },
+  { pos: 15, points: 6 },
+  { pos: 16, points: 5 },
+  { pos: 17, points: 4 },
+  { pos: 18, points: 3 },
+  { pos: 19, points: 2 },
+  { pos: 20, points: 1 },
+  { pos: 21, points: 1 },
+  { pos: 22, points: 1 },
+  { pos: 23, points: 1 },
+  { pos: 24, points: 1 },
+  { pos: 25, points: 1 },
+];
+
+export const scoringSystem_old = [
+  { pos: 1, points: 30 },
   { pos: 2, points: 28 },
   { pos: 3, points: 26 },
   { pos: 4, points: 24 },
@@ -28,7 +56,6 @@ export const scoringSystem = [
   { pos: 24, points: 2 },
   { pos: 25, points: 1 },
 ];
-
 export const TitleText = styled(Typography)(() => ({
   fontFamily: "Nunito-Sans",
   fontWeight: 800,
