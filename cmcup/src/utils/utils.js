@@ -1,7 +1,63 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export const scoringSystem = [
+export const scoringSystem3 = [
+  { pos: 1, points: 90 },
+  { pos: 2, points: 87 },
+  { pos: 3, points: 85 },
+  { pos: 4, points: 83 },
+  { pos: 5, points: 81 },
+  { pos: 6, points: 79 },
+  { pos: 7, points: 77 },
+  { pos: 8, points: 75 },
+  { pos: 9, points: 73 },
+  { pos: 10, points: 71 },
+  { pos: 11, points: 70 },
+  { pos: 12, points: 69 },
+  { pos: 13, points: 68 },
+  { pos: 14, points: 67 },
+  { pos: 15, points: 66 },
+  { pos: 16, points: 65 },
+  { pos: 17, points: 64 },
+  { pos: 18, points: 63 },
+  { pos: 19, points: 62 },
+  { pos: 20, points: 61 },
+  { pos: 21, points: 1 },
+  { pos: 22, points: 1 },
+  { pos: 23, points: 1 },
+  { pos: 24, points: 1 },
+  { pos: 25, points: 1 },
+];
+
+export const scoringSystem2= [
+  { pos: 1, points: 60 },
+  { pos: 2, points: 57 },
+  { pos: 3, points: 55 },
+  { pos: 4, points: 53 },
+  { pos: 5, points: 51 },
+  { pos: 6, points: 49 },
+  { pos: 7, points: 47 },
+  { pos: 8, points: 45 },
+  { pos: 9, points: 43 },
+  { pos: 10, points: 41 },
+  { pos: 11, points: 40 },
+  { pos: 12, points: 39 },
+  { pos: 13, points: 38 },
+  { pos: 14, points: 37 },
+  { pos: 15, points: 36 },
+  { pos: 16, points: 35 },
+  { pos: 17, points: 34 },
+  { pos: 18, points: 33 },
+  { pos: 19, points: 32 },
+  { pos: 20, points: 31 },
+  { pos: 21, points: 1 },
+  { pos: 22, points: 1 },
+  { pos: 23, points: 1 },
+  { pos: 24, points: 1 },
+  { pos: 25, points: 1 },
+];
+
+export const scoringSystem1= [
   { pos: 1, points: 30 },
   { pos: 2, points: 27 },
   { pos: 3, points: 25 },
@@ -29,31 +85,31 @@ export const scoringSystem = [
   { pos: 25, points: 1 },
 ];
 
-export const scoringSystem_old = [
+export const scoringSystem = [
   { pos: 1, points: 30 },
   { pos: 2, points: 28 },
   { pos: 3, points: 26 },
   { pos: 4, points: 24 },
   { pos: 5, points: 22 },
   { pos: 6, points: 20 },
-  { pos: 7, points: 19 },
-  { pos: 8, points: 18 },
-  { pos: 9, points: 17 },
-  { pos: 10, points: 16 },
-  { pos: 11, points: 15 },
-  { pos: 12, points: 14 },
-  { pos: 13, points: 13 },
-  { pos: 14, points: 12 },
-  { pos: 15, points: 11 },
-  { pos: 16, points: 10 },
-  { pos: 17, points: 9 },
-  { pos: 18, points: 8 },
-  { pos: 19, points: 7 },
-  { pos: 20, points: 6 },
-  { pos: 21, points: 5 },
-  { pos: 22, points: 4 },
-  { pos: 23, points: 3 },
-  { pos: 24, points: 2 },
+  { pos: 7, points: 18 },
+  { pos: 8, points: 16 },
+  { pos: 9, points: 14 },
+  { pos: 10, points: 13 },
+  { pos: 11, points: 12 },
+  { pos: 12, points: 11 },
+  { pos: 13, points: 10 },
+  { pos: 14, points: 9 },
+  { pos: 15, points: 8 },
+  { pos: 16, points: 7 },
+  { pos: 17, points: 6 },
+  { pos: 18, points: 5 },
+  { pos: 19, points: 4 },
+  { pos: 20, points: 3 },
+  { pos: 21, points: 2 },
+  { pos: 22, points: 1 },
+  { pos: 23, points: 1 },
+  { pos: 24, points: 1 },
   { pos: 25, points: 1 },
 ];
 export const TitleText = styled(Typography)(() => ({
@@ -346,10 +402,7 @@ export const getDriverFinalPoints2 = (championship, driver) => {
 
   const racesToRemove = totalRaces > 9 ? 3 : totalDriverRaces > 7 ? 2 : 1;
 
-  const arrayWithoutWorse =
-    racesToRemove > 1
-      ? arrayOfPoints.sort((a, b) => a - b).slice(racesToRemove)
-      : arrayOfPoints;
+  const arrayWithoutWorse = arrayOfPoints.sort((a, b) => a - b)
 
   return arrayWithoutWorse.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;
